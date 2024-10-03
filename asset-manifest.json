@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/nutridigital/static/css/main.956f3d48.css",
-    "main.js": "/nutridigital/static/js/main.78bfb970.js",
+    "main.js": "/nutridigital/static/js/main.c00baea0.js",
     "static/media/medio.jpg": "/nutridigital/static/media/medio.b23b416afa855f7ac5a1.jpg",
     "index.html": "/nutridigital/index.html",
     "main.956f3d48.css.map": "/nutridigital/static/css/main.956f3d48.css.map",
-    "main.78bfb970.js.map": "/nutridigital/static/js/main.78bfb970.js.map"
+    "main.c00baea0.js.map": "/nutridigital/static/js/main.c00baea0.js.map"
   },
   "entrypoints": [
     "static/css/main.956f3d48.css",
-    "static/js/main.78bfb970.js"
+    "static/js/main.c00baea0.js"
   ]
 }
