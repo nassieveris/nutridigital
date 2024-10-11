@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  return(
+  const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (user === "admin" && password === "123456") {
+      navigate("/dataform");
+    } else {
+      setError("Usuario o contraseña incorrectos");
+    }
+  };
+
+  return (
     <>
       <section className="intro medio rojo modulo">
         <div className="contenedor">
@@ -10,23 +25,36 @@ const Login = () => {
         </div>
       </section>
       <section className="formulario rojo">
-        <form id="loginForm">
-
+        <form id="loginForm" onSubmit={handleSubmit}>
           <div className="form-item">
             <label htmlFor="user">User:</label>
-            <input type="text" id="user" name="user" />
+            <input
+              type="text"
+              id="user"
+              name="user"
+              value={user}
+              onChange={(e) => setUser(e.target.value)}
+            />
           </div>
-          <br></br>
+          <br />
           <div className="form-item">
             <label htmlFor="password">Password:</label>
-            <input type="password" id="password" />
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
-          <br></br>
-          <button className="form-button" type="submit">Acceder</button>
+          <br />
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          <button className="form-button" type="submit">
+            Acceder
+          </button>
         </form>
       </section>
     </>
-  )
-}
+  );
+};
 
 export default Login;
