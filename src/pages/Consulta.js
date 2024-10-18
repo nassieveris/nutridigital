@@ -2,74 +2,171 @@ import React, { useState } from 'react';
 
 const Consulta = () => {
   const [showMessage, setShowMessage] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    sexo: '',
+    nombre: '',
+    edad: '',
+    peso: '',
+    altura: '',
+    tipo: '',
+    mail: '',
+    direccion: '',
+    dia: '',
+    horario: '',
+    mensaje: '',
+  });
+
+  const [errors, setErrors] = useState({
+    sexo: '',
+    nombre: '',
+    edad: '',
+    peso: '',
+    altura: '',
+    tipo: '',
+    mail: '',
+    direccion: '',
+    dia: '',
+    horario: '',
+    mensaje: '',
+  });
+
+  const nombreRegex = /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ\s]*$/;
+  const edadRegex = /^\d{1,2}$/;
+  const pesoRegex = /^\d{1,3}(\.\d{1,2})?$/; // Permite hasta 3 dígitos enteros y 2 decimales opcionales
+  const alturaRegex = /^\d{1,3}$/; // Permite hasta 3 dígitos enteros
+  const mailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const direccionRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s.,#\-\/]+$/;
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    setErrors({
+      ...errors,
+      [name]: '', // Limpiar el error cuando el usuario cambia el valor
+    });
+  };
+
+  const validateField = (name, value) => {
+    let error = '';
+    switch (name) {
+      case 'sexo':
+        if (!value) error = 'Seleccione Sexo';
+        break;
+      case 'nombre':
+        if (!nombreRegex.test(value)) {
+          error = 'Nombre acepta hasta 30 caracteres, sólo letras y espacios.';
+        }
+        break;
+      case 'edad':
+        if (!edadRegex.test(value)) {
+          error = 'Edad debe ser un número de hasta 2 dígitos.';
+        }
+        break;
+      case 'peso':
+        if (!pesoRegex.test(value)) {
+          error = 'Peso debe ser un número válido (hasta 3 dígitos enteros y 2 decimales opcionales).';
+        }
+        break;
+      case 'altura':
+        if (!alturaRegex.test(value)) {
+          error = 'Altura debe ser un número de hasta 3 dígitos.';
+        }
+        break;
+      case 'tipo':
+        if (!value) error = 'Debe seleccionar un servicio.';
+        break;
+      case 'mail':
+        if (!mailRegex.test(value)) {
+          error = 'Correo Electrónico no ingresado o no válido.';
+        }
+        break;
+      case 'direccion':
+        if (!direccionRegex.test(value)) {
+          error = 'Dirección debe contener letras, números y espacios.';
+        }
+        break;
+      case 'dia':
+        if (!value) error = 'Debe seleccionar un día.';
+        break;
+      case 'horario':
+        if (!value) error = 'Debe seleccionar un horario.';
+        break;
+      case 'mensaje':
+        if (!value.trim()) {
+          error = 'Debe ingresar un detalle de consulta.';
+        }
+        break;
+      default:
+        break;
+    }
+    return error;
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    const error = validateField(name, value);
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: error,
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const { sexo, nombre, edad, peso, altura, tipo, mail, direccion, dia, horario, mensaje } = formData;
 
-    const nombreInput = e.target.elements.nombre.value;
-    const edadInput = e.target.elements.edad.value;
-    const tipoInput = e.target.elements.tipo.value;
-    const mailInput = e.target.elements.mail.value;
-    const direccionInput = e.target.elements.direccion.value;
-    const mensajeInput = e.target.elements.mensaje.value;
-    const tipoMascotaInput = e.target.elements.tipo_mascota.value;
+    // Validar todos los campos antes de enviar
+    const newErrors = {
+      sexo: validateField('sexo', sexo),
+      nombre: validateField('nombre', nombre),
+      edad: validateField('edad', edad),
+      peso: validateField('peso', peso),
+      altura: validateField('altura', altura),
+      tipo: validateField('tipo', tipo),
+      mail: validateField('mail', mail),
+      direccion: validateField('direccion', direccion),
+      dia: validateField('dia', dia),
+      horario: validateField('horario', horario),
+      mensaje: validateField('mensaje', mensaje),
+    };
 
-    const nombreRegex = /^[A-Za-z\s]{1,30}$/;
-    const edadRegex = /^\d{1,2}$/;
-    const mailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const direccionRegex = /^[A-Za-z\s]{1,69}$/;
+    setErrors(newErrors);
 
-    if (!tipoMascotaInput) {
-      alert('Debe seleccionar un tipo de mascota.');
-      return;
-    }
+    // Si hay algún error, no enviar el formulario
+    const hasErrors = Object.values(newErrors).some((error) => error);
+    if (hasErrors) return;
 
-    if (!nombreRegex.test(nombreInput)) {
-      alert('Nombre de su Mascota debe tener entre 1 y 30 caracteres, y solo puede contener letras y espacios.');
-      return;
-    }
+    // Recuperar datos previos de localStorage
+    const registrosPrevios = JSON.parse(localStorage.getItem('registros')) || [];
 
-    if (!edadRegex.test(edadInput)) {
-      alert('Edad debe ser un número de hasta 2 dígitos.');
-      return;
-    }
+    // Añadir los nuevos datos al array de registros
+    const registrosActualizados = [...registrosPrevios, formData];
 
-    if (!tipoInput) {
-      alert('Debe seleccionar un tamaño.');
-      return;
-    }
+    // Guardar el array actualizado en localStorage
+    localStorage.setItem('registros', JSON.stringify(registrosActualizados));
 
-    if (!mailRegex.test(mailInput)) {
-      alert('Correo Electrónico no válido.');
-      return;
-    }
-
-    if (!direccionRegex.test(direccionInput)) {
-      alert('Dirección debe tener entre 1 y 69 caracteres, y solo puede contener letras y espacios.');
-      return;
-    }
-
-    if (!mensajeInput.trim()) {
-      alert('Debe ingresar un detalle de consulta.');
-      return;
-    }
-
-    setFormData({
-      nombre: nombreInput,
-      edad: edadInput,
-      tipo: tipoInput,
-      mail: mailInput,
-      direccion: direccionInput,
-      mensaje: mensajeInput,
-      tipoMascota: tipoMascotaInput
-    });
-
+    // Mostrar mensaje de agradecimiento
     setShowMessage(true);
   };
 
   const handleReset = () => {
-    document.getElementById('consultaForm').reset();
+    setFormData({
+      sexo: '',
+      nombre: '',
+      edad: '',
+      peso: '',
+      altura: '',
+      tipo: '',
+      mail: '',
+      direccion: '',
+      dia: '',
+      horario: '',
+      mensaje: '',
+    });
+    setErrors({});
     setShowMessage(false);
   };
 
@@ -78,118 +175,135 @@ const Consulta = () => {
       <section className="intro medio rojo modulo">
         <div className="contenedor">
           <h2 className="sub-title text-center">¡Agenda con nosotros!</h2>
-          <p className="text-center">Cuando hayas realizado tu solicitud. <br></br>Nos comunicaremos via Whatsapp para confirmarte el mejor horariodisponible para ti.<br></br><br></br></p>
+          <p className="text-center">Nos comunicaremos vía WhatsApp para confirmarte el mejor horario disponible para ti.</p>
         </div>
       </section>
       <section className="formulario rojo">
         <form id="consultaForm" className={`form-layout ${showMessage ? '' : 'show'}`} onSubmit={handleSubmit}>
           <div className="form-item">
-            <label htmlFor="tipo_mascota">Soy:</label>
+            <label>Soy:</label>
             <div className='form-radio'>
-              <input type="radio" name="tipo_mascota" value="Hombre" id="Hombre" />
+              <input
+                type="radio"
+                id="Hombre"
+                name="sexo"
+                value="Hombre"
+                checked={formData.sexo === 'Hombre'}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
               <label htmlFor="Hombre">Hombre</label>
             </div>
             <div className='form-radio'>
-              <input type="radio" name="tipo_mascota" value="Mujer" id="Mujer" />
+              <input
+                type="radio"
+                id="Mujer"
+                name="sexo"
+                value="Mujer"
+                checked={formData.sexo === 'Mujer'}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
               <label htmlFor="Mujer">Mujer</label>
             </div>
+            {errors.sexo && <span className="error-message">{errors.sexo}</span>}
           </div>
+
           <div className="form-item">
             <label htmlFor="nombre">Nombre Completo:</label>
-            <input type="text" id="nombre" name="nombre" />
+            <input type="text" id="nombre" name="nombre" value={formData.nombre} onChange={handleChange} onBlur={handleBlur} />
+            {errors.nombre && <span className="error-message">{errors.nombre}</span>}
           </div>
-          <div className="form-item form-halfs">
+
+          <div className="form-item">
             <label htmlFor="edad">Edad:</label>
-            <input type="number" id="edad" />
+            <input type="number" id="edad" name="edad" value={formData.edad} onChange={handleChange} onBlur={handleBlur} />
+            {errors.edad && <span className="error-message">{errors.edad}</span>}
           </div>
-          <div className="form-item form-halfs">
+
+          <div className="form-item">
             <label htmlFor="peso">Peso (kg):</label>
-            <input type="number" id="pesoa" />
+            <input type="number" id="peso" name="peso" value={formData.peso} onChange={handleChange} onBlur={handleBlur} />
+            {errors.peso && <span className="error-message">{errors.peso}</span>}
           </div>
-          <div className="form-item form-halfs">
-            <label htmlFor="alto">Altura (cm):</label>
-            <input type="number" id="alto" />
+
+          <div className="form-item">
+            <label htmlFor="altura">Altura (cm):</label>
+            <input type="number" id="altura" name="altura" value={formData.altura} onChange={handleChange} onBlur={handleBlur} />
+            {errors.altura && <span className="error-message">{errors.altura}</span>}
           </div>
+
           <div className="form-item">
             <label htmlFor="tipo">Servicio a tomar:</label>
-            <select id="tipo">
+            <select id="tipo" name="tipo" value={formData.tipo} onChange={handleChange} onBlur={handleBlur}>
               <option value="">Seleccione</option>
               <option value="Primera Consulta">Primera Consulta</option>
               <option value="Plan Nutricional">Plan Nutricional</option>
               <option value="Seguimiento Nutricional">Seguimiento Nutricional</option>
               <option value="Asesoría Especializada">Asesoría Especializada</option>
             </select>
+            {errors.tipo && <span className="error-message">{errors.tipo}</span>}
           </div>
+
           <div className="form-item">
-            <label htmlFor="contactar">Contactar con:</label>
-            <select id="contactar">
-              <option value="">Seleccione</option>
-              <option value="Gia Alegría">Gia Alegría</option>
-              <option value="Gonzalo Bueno">Gonzalo Bueno</option>
-              <option value="Bruno Balboa">Bruno Balboa</option>
-              <option value="Gabriela Gavilan">Gabriela Gavilan</option>
-            </select>
-          </div>
-          <div className="form-item form-half">
             <label htmlFor="mail">Email:</label>
-            <input type="email" id="mail" />
+            <input type="email" id="mail" name="mail" value={formData.mail} onChange={handleChange} onBlur={handleBlur} />
+            {errors.mail && <span className="error-message">{errors.mail}</span>}
           </div>
+
           <div className="form-item">
             <label htmlFor="direccion">Dirección:</label>
-            <input type="text" id="direccion" />
+            <input type="text" id="direccion" name="direccion" value={formData.direccion} onChange={handleChange} onBlur={handleBlur} />
+            {errors.direccion && <span className="error-message">{errors.direccion}</span>}
           </div>
+
           <div className="form-item">
-            <label htmlFor="preferencia">Preferencia de Horario:</label>
-            <input type="text" id="preferencia" />
+            <label htmlFor="dia">Día:</label>
+            <input type="date" id="dia" name="dia" value={formData.dia} onChange={handleChange} onBlur={handleBlur} />
+            {errors.dia && <span className="error-message">{errors.dia}</span>}
           </div>
+
+          <div className="form-item">
+            <label htmlFor="horario">Preferencia de Horario:</label>
+            <select id="horario" name="horario" value={formData.horario} onChange={handleChange} onBlur={handleBlur}>
+              <option value="">Seleccione</option>
+              <option value="15:00">15:00</option>
+              <option value="15:30">15:30</option>
+              <option value="16:00">16:00</option>
+              <option value="16:30">16:30</option>
+              <option value="17:00">17:00</option>
+              <option value="17:30">17:30</option>
+              <option value="18:00">18:00</option>
+              <option value="18:30">18:30</option>
+              <option value="19:00">19:00</option>
+              <option value="19:30">19:30</option>
+              <option value="20:00">20:00</option>
+              <option value="20:30">20:30</option>
+              <option value="21:00">21:00</option>
+            </select>
+            {errors.horario && <span className="error-message">{errors.horario}</span>}
+          </div>
+
           <div className="form-item">
             <label htmlFor="mensaje">Detalle de Consulta:</label>
-            <textarea id="mensaje"></textarea>
+            <textarea id="mensaje" name="mensaje" value={formData.mensaje} onChange={handleChange} onBlur={handleBlur} rows="5"></textarea>
+            {errors.mensaje && <span className="error-message">{errors.mensaje}</span>}
           </div>
+
           <button className="form-button" type="submit">Solicitar Consulta</button>
         </form>
+
         {showMessage && (
           <section className="gracias show">
             <h2>¡Muchas Gracias!</h2>
             <p>Aquí puede ver los detalles de su consulta</p>
-            <table>
-              <tbody>
-                <tr>
-                  <td>Tipo de Mascota:</td>
-                  <td>{formData.tipoMascota}</td>
-                </tr>
-                <tr>
-                  <td>Nombre de su Mascota:</td>
-                  <td>{formData.nombre}</td>
-                </tr>
-                <tr>
-                  <td>Edad:</td>
-                  <td>{formData.edad}</td>
-                </tr>
-                <tr>
-                  <td>Tipo de Consulta:</td>
-                  <td>{formData.tipo}</td>
-                </tr>
-                <tr>
-                  <td>Email:</td>
-                  <td>{formData.mail}</td>
-                </tr>
-                <tr>
-                  <td>Dirección:</td>
-                  <td>{formData.direccion}</td>
-                </tr>
-                <tr>
-                  <td>Detalle de Consulta:</td>
-                  <td>{formData.mensaje}</td>
-                </tr>
-              </tbody>
-            </table>
+            {/* Mostrar los detalles del formulario */}
             <button className='btn big' type="button" onClick={handleReset}>Volver al formulario</button>
           </section>
         )}
       </section>
     </>
   );
-}
+};
 
 export default Consulta;
