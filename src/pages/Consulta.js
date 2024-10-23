@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { opcion } from '../modules/Staff';
+import { opcion as tipoOpcion } from '../modules/Llamanos';
 
 const Consulta = () => {
   const [showMessage, setShowMessage] = useState(false);
@@ -245,10 +246,9 @@ const Consulta = () => {
             <label htmlFor="tipo">Servicio a tomar:</label>
             <select id="tipo" name="tipo" value={formData.tipo} onChange={handleChange} onBlur={handleBlur}>
               <option value="">Seleccione</option>
-              <option value="Primera Consulta">Primera Consulta</option>
-              <option value="Plan Nutricional">Plan Nutricional</option>
-              <option value="Seguimiento Nutricional">Seguimiento Nutricional</option>
-              <option value="Asesoría Especializada">Asesoría Especializada</option>
+              {tipoOpcion.map((tipo, index) => (
+                <option key={index} value={tipo.titulo}>{tipo.titulo}</option>
+              ))}
             </select>
             {errors.tipo && <span className="error-message">{errors.tipo}</span>}
           </div>

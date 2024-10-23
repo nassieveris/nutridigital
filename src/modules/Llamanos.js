@@ -1,6 +1,6 @@
 import React from "react";
 
-const opcion = [
+export const opcion = [
   {titulo: 'Consulta Inicial', cuerpo: 'Evaluación personalizada de tu estado nutricional y objetivos de salud.', src: 'images/modulos/item-1.jpg'},
   {titulo: 'Plan Nutricional', cuerpo: 'Creación de un plan alimenticio adaptado a tus necesidades y preferencias.', src: 'images/modulos/item-2.jpg'},
   {titulo: 'Seguimiento Mensual', cuerpo: 'Revisión y ajuste del plan nutricional para asegurar el progreso continuo.', src: 'images/modulos/item-3.jpg'},

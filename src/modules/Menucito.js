@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 const routes = [
   { name: 'Dataform', path: '/dataform' },
   { name: 'Datacitas', path: '/datacitas' },
+  { name: 'Datatipos', path: '/datatipos' },
 ];
 
 const Menucito = () => {

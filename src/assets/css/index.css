@@ -699,10 +699,12 @@ table {
     gap: 1rem;
     margin-top: 2rem;
 }
-.nutridocs {
+.nutridocs,
+.tipodocs {
   margin-bottom: 2rem;
 }
-.nutridocs table {
+.nutridocs table,
+.tipodocs table {
   margin-top: .5rem;
 }
 
