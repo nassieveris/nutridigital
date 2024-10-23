@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Menucito from "../modules/Menucito";
 
 const Dataform = () => {
   const [registros, setRegistros] = useState([]);
@@ -55,6 +56,7 @@ const Dataform = () => {
 
   return (
     <>
+      <Menucito />
       <section className="intro medio rojo modulo">
         <div className="contenedor">
           <h2 className="sub-title text-center">Resultados</h2>

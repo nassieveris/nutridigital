@@ -7,6 +7,7 @@ import Consulta from "./pages/Consulta";
 import Contacto from "./pages/Contacto";
 import Login from "./pages/Login";
 import Dataform from "./pages/Dataform";
+import Datacitas from "./pages/Datacitas";
 
 const Main = () => {
   return(
@@ -19,6 +20,7 @@ const Main = () => {
           <Route path='/contacto' element={<Contacto />} />
           <Route path='/login' element={<Login />} />
           <Route path='/dataform' element={<Dataform />} />
+          <Route path='/datacitas' element={<Datacitas />} />
         </Routes>
     </main>
   )

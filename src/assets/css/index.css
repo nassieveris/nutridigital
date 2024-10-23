@@ -699,3 +699,30 @@ table {
     gap: 1rem;
     margin-top: 2rem;
 }
+.nutridocs {
+  margin-bottom: 2rem;
+}
+.nutridocs table {
+  margin-top: .5rem;
+}
+
+.menucito-ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.menucito-link {
+  background: forestgreen;
+  color: white;
+  font-weight: 900;
+  padding: 0.5rem 1rem;
+  border-radius: .75rem;
+  line-height: 1;
+  transition: .25s all;
+}
+.menucito-link:hover,
+.menucito-link.menucito-active {
+  background: beige;
+  color: forestgreen;
+}
