@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { opcion } from '../modules/Staff';
 
 const Consulta = () => {
   const [showMessage, setShowMessage] = useState(false);
@@ -14,6 +15,7 @@ const Consulta = () => {
     dia: '',
     horario: '',
     mensaje: '',
+    nutricionista: ''
   });
 
   const [errors, setErrors] = useState({
@@ -28,6 +30,7 @@ const Consulta = () => {
     dia: '',
     horario: '',
     mensaje: '',
+    nutricionista: ''
   });
 
   const nombreRegex = /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ\s]*$/;
@@ -99,6 +102,9 @@ const Consulta = () => {
           error = 'Debe ingresar un detalle de consulta.';
         }
         break;
+      case 'nutricionista':
+        if (!value) error = 'Debe seleccionar un nutricionista.';
+        break;
       default:
         break;
     }
@@ -116,7 +122,7 @@ const Consulta = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { sexo, nombre, edad, peso, altura, tipo, mail, direccion, dia, horario, mensaje } = formData;
+    const { sexo, nombre, edad, peso, altura, tipo, mail, direccion, dia, horario, mensaje, nutricionista } = formData;
 
     // Validar todos los campos antes de enviar
     const newErrors = {
@@ -131,6 +137,7 @@ const Consulta = () => {
       dia: validateField('dia', dia),
       horario: validateField('horario', horario),
       mensaje: validateField('mensaje', mensaje),
+      nutricionista: validateField('nutricionista', nutricionista),
     };
 
     setErrors(newErrors);
@@ -165,6 +172,7 @@ const Consulta = () => {
       dia: '',
       horario: '',
       mensaje: '',
+      nutricionista: ''
     });
     setErrors({});
     setShowMessage(false);
@@ -243,6 +251,17 @@ const Consulta = () => {
               <option value="Asesoría Especializada">Asesoría Especializada</option>
             </select>
             {errors.tipo && <span className="error-message">{errors.tipo}</span>}
+          </div>
+
+          <div className="form-item">
+            <label htmlFor="nutricionista">Nutricionista:</label>
+            <select id="nutricionista" name="nutricionista" value={formData.nutricionista} onChange={handleChange} onBlur={handleBlur}>
+              <option value="">Seleccione</option>
+              {opcion.map((nutricionista, index) => (
+                <option key={index} value={nutricionista.titulo}>{nutricionista.titulo}</option>
+              ))}
+            </select>
+            {errors.nutricionista && <span className="error-message">{errors.nutricionista}</span>}
           </div>
 
           <div className="form-item">

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const opcion = [
+export const opcion = [
   {
     titulo: 'Lic. Gia Alegría',
     cuerpo: 'Nutricionista especializada en consultas virtuales, comprometida con la salud y el bienestar.',

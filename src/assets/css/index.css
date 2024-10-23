@@ -677,7 +677,8 @@ table {
 	caption-side: bottom;
 }
 
-.delete {
+.delete,
+.export {
   background: red;
   border: 0;
   color: white;
@@ -685,7 +686,16 @@ table {
   cursor: pointer;
   border-radius: 1rem;
 }
+.export {
+  background-color: blueviolet;
+}
 .registros {
   overflow-x: auto;
   padding-bottom: 25px;
+}
+.data-text {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
 }
